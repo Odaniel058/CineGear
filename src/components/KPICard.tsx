@@ -94,6 +94,18 @@ export const KPICard: React.FC<KPICardProps> = ({
       }`}
       onClick={onClick}
     >
+      {/* Left accent bar */}
+      <div
+        className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          background: changeType === 'positive'
+            ? 'hsl(142 65% 42%)'
+            : changeType === 'negative'
+            ? 'hsl(0 72% 51%)'
+            : 'linear-gradient(180deg, hsl(var(--gold-dark)), hsl(var(--gold-light)))',
+        }}
+      />
+
       {/* Shimmer sweep on hover */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
         <div className="absolute inset-0 shimmer-effect" />

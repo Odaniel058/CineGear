@@ -112,13 +112,24 @@ const ClientsPage: React.FC = () => {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.04 }}
-                    className={`glass-card p-4 premium-shadow transition-all ${selectedId === client.id ? "border-primary/30 bg-primary/5" : "hover:premium-shadow-lg"}`}
+                    whileHover={{ y: -1 }}
+                    className={`glass-card p-4 transition-all duration-200 cursor-pointer ${
+                      selectedId === client.id
+                        ? "border-primary/35 bg-primary/6 premium-shadow-lg"
+                        : "premium-shadow hover:border-primary/15 hover:premium-shadow-lg"
+                    }`}
                   >
                     <div className="flex items-center justify-between gap-4">
                       <button type="button" className="flex flex-1 items-center gap-3 text-left" onClick={() => setSelectedId(client.id)}>
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/12">
+                        <motion.div
+                          animate={selectedId === client.id ? { scale: 1.08 } : { scale: 1 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                          className={`flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 ${
+                            selectedId === client.id ? "bg-primary/20 ring-2 ring-primary/20" : "bg-primary/12"
+                          }`}
+                        >
                           <span className="text-sm font-semibold text-primary">{client.contactName.charAt(0)}</span>
-                        </div>
+                        </motion.div>
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
                             <p className="truncate text-sm font-medium">{client.contactName}</p>

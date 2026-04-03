@@ -9,6 +9,8 @@ import {
   Check,
   CheckCircle2,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Menu,
   Clock,
   DollarSign,
@@ -749,15 +751,35 @@ const LandingPage: React.FC = () => {
             </AnimatePresence>
           </div>
 
-          <div className="mt-6 flex justify-center gap-2">
-            {testimonials.map((item, index) => (
-              <button
-                key={item.name}
-                onClick={() => setActiveTestimonial(index)}
-                className={index === activeTestimonial ? "testimonial-dot active" : "testimonial-dot"}
-                aria-label={`Ver depoimento ${index + 1}`}
-              />
-            ))}
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border/60 bg-background/60 text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
+              aria-label="Depoimento anterior"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </motion.button>
+            <div className="flex gap-2">
+              {testimonials.map((item, index) => (
+                <button
+                  key={item.name}
+                  onClick={() => setActiveTestimonial(index)}
+                  className={index === activeTestimonial ? "testimonial-dot active" : "testimonial-dot"}
+                  aria-label={`Ver depoimento ${index + 1}`}
+                />
+              ))}
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setActiveTestimonial((prev) => (prev + 1) % testimonials.length)}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border/60 bg-background/60 text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
+              aria-label="Próximo depoimento"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </motion.button>
           </div>
         </div>
       </section>
@@ -990,18 +1012,18 @@ const LandingPage: React.FC = () => {
             </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <Accordion type="single" collapsible className="space-y-3">
-              {faqs.map((faq, index) => (
+          <Accordion type="single" collapsible className="space-y-3">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.055, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
                 <AccordionItem
-                  key={index}
                   value={`faq-${index}`}
-                  className="rounded-2xl border border-border/60 bg-background/60 px-6 data-[state=open]:border-primary/40 transition-colors duration-200"
+                  className="rounded-2xl border border-border/60 bg-background/60 px-6 data-[state=open]:border-primary/40 data-[state=open]:bg-primary/3 transition-all duration-200"
                 >
                   <AccordionTrigger className="py-5 text-left font-semibold hover:no-underline hover:text-primary transition-colors [&[data-state=open]]:text-primary">
                     {faq.q}
@@ -1010,9 +1032,9 @@ const LandingPage: React.FC = () => {
                     {faq.a}
                   </AccordionContent>
                 </AccordionItem>
-              ))}
-            </Accordion>
-          </motion.div>
+              </motion.div>
+            ))}
+          </Accordion>
 
           <motion.div
             initial={{ opacity: 0 }}

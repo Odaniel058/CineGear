@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { Search } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppData } from "@/contexts/AppDataContext";
 import { AppSidebar } from "./AppSidebar";
@@ -74,30 +75,48 @@ export const AppLayout: React.FC = () => {
       />
       <main className="flex-1 min-w-0 overflow-x-hidden overflow-y-auto">
         {/* Top bar */}
-        <div className="sticky top-0 z-20 flex h-14 items-center justify-between gap-3 border-b border-border/50 bg-background/80 px-4 backdrop-blur-md sm:px-5 lg:px-8">
-          <p className="truncate pl-10 text-sm font-semibold text-muted-foreground md:pl-0">{pageTitle}</p>
+        <div className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b border-border/40 bg-background/90 px-4 backdrop-blur-md sm:px-5 lg:px-8 after:absolute after:inset-x-8 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-border/80 after:to-transparent after:pointer-events-none relative">
+          <div className="flex items-center gap-3 min-w-0">
+            <p className="truncate pl-10 font-display text-base font-semibold tracking-tight md:pl-0">{pageTitle}</p>
+          </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <button
               onClick={() => setCmdOpen(true)}
-              className="hidden md:flex items-center gap-2 rounded-xl border border-border/60 bg-background/80 px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              className="hidden md:flex items-center gap-2 rounded-xl border border-border/60 bg-surface/60 px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-surface transition-all duration-200"
             >
               <Search className="h-3.5 w-3.5" />
               <span>Buscar...</span>
-              <kbd className="ml-1 border border-border/60 rounded px-1 py-0.5 font-mono text-[10px] bg-muted/50">Ctrl K</kbd>
+              <kbd className="ml-2 border border-border/60 rounded-lg px-1.5 py-0.5 font-mono text-[10px] bg-muted/60 text-muted-foreground/80">⌃K</kbd>
             </button>
             <NotificationsDropdown />
-            <div className="hidden md:flex items-center gap-2.5 rounded-xl border border-border/60 bg-background/80 px-3 py-1.5">
-              <div className="flex h-6 w-6 items-center justify-center rounded-full gradient-gold text-[10px] font-bold text-primary-foreground">
+            <div className="hidden md:flex items-center gap-2.5 rounded-xl border border-border/60 bg-surface/60 px-3 py-1.5 hover:border-border transition-colors duration-200">
+              <motion.div
+                whileHover={{ scale: 1.08 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className="flex h-7 w-7 items-center justify-center rounded-full gradient-gold text-[11px] font-bold text-primary-foreground flex-shrink-0"
+              >
                 {user?.name?.charAt(0).toUpperCase() ?? "U"}
+              </motion.div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-semibold leading-tight truncate">{user?.name}</span>
+                <span className="text-[10px] text-muted-foreground leading-tight truncate">{user?.company}</span>
               </div>
-              <span className="text-xs font-medium">{user?.name}</span>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1600px] p-4 sm:p-5 md:pt-6 lg:p-8">
-          <Outlet />
-        </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="mx-auto max-w-[1600px] p-4 sm:p-5 md:pt-6 lg:p-8"
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </main>
       <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
     </div>

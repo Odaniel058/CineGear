@@ -87,14 +87,28 @@ const QuotesPage: React.FC = () => {
         </div>
 
         <div className="glass-card p-4 premium-shadow">
-          <div className="grid gap-3 xl:grid-cols-[1.8fr_1fr]">
+          <div className="flex flex-col gap-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input placeholder="Buscar por cliente ou codigo..." value={search} onChange={(event) => setSearch(event.target.value)} className="pl-9" />
             </div>
-            <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as QuoteStatus | "all")} className="h-10 rounded-md border border-input bg-background px-3 text-sm">
-              {statuses.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
-            </select>
+            <div className="flex flex-wrap gap-2">
+              {statuses.map((item) => (
+                <motion.button
+                  key={item.value}
+                  type="button"
+                  onClick={() => setStatusFilter(item.value)}
+                  whileTap={{ scale: 0.95 }}
+                  className={`relative rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all duration-200 ${
+                    statusFilter === item.value
+                      ? "border-primary/30 bg-primary text-primary-foreground shadow-sm shadow-primary/20"
+                      : "border-border/60 bg-surface/50 text-muted-foreground hover:border-primary/20 hover:text-foreground hover:bg-surface"
+                  }`}
+                >
+                  {item.label}
+                </motion.button>
+              ))}
+            </div>
           </div>
         </div>
 

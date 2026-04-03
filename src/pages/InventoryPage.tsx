@@ -477,16 +477,31 @@ const InventoryPage: React.FC = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.02 }}
-                        className={`cursor-pointer border-b border-border/40 transition-colors hover:bg-surface/70 ${
-                          selectedId === item.id ? "bg-primary/6" : ""
+                        className={`cursor-pointer border-b border-border/40 transition-all duration-200 group/row relative ${
+                          selectedId === item.id
+                            ? "bg-primary/8 hover:bg-primary/10"
+                            : "hover:bg-surface/80"
                         }`}
                         onClick={() => handleSelectEquipment(item.id)}
                       >
-                        <td className="px-5 py-4">
+                        <td className="px-5 py-4 relative">
+                          {selectedId === item.id && (
+                            <motion.div
+                              layoutId="table-row-accent"
+                              className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r-full bg-primary"
+                              transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                            />
+                          )}
                           <div className="flex items-center gap-3">
-                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                            <motion.div
+                              whileHover={{ scale: 1.08 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                              className={`flex h-11 w-11 items-center justify-center rounded-2xl transition-colors duration-200 ${
+                                selectedId === item.id ? "bg-primary/20 text-primary" : "bg-primary/10 text-primary group-hover/row:bg-primary/15"
+                              }`}
+                            >
                               <Package className="h-4.5 w-4.5" />
-                            </div>
+                            </motion.div>
                             <div>
                               <p className="text-sm font-semibold">{item.name}</p>
                               <p className="text-xs text-muted-foreground">{item.brand} • {item.model}</p>
@@ -498,7 +513,7 @@ const InventoryPage: React.FC = () => {
                         <td className="px-5 py-4 text-sm text-muted-foreground">{item.location}</td>
                         <td className="px-5 py-4 text-right text-sm font-semibold">{formatCurrency(item.dailyRate)}</td>
                         <td className="px-5 py-4">
-                          {(() => { const u = utilizationMap.get(item.id); if (!u) return null; const color = u.rate >= 70 ? "bg-green-500" : u.rate >= 40 ? "bg-yellow-500" : "bg-muted-foreground/40"; return (<div className="flex items-center gap-2"><div className="w-14 h-1.5 rounded-full bg-border/50"><div className={`h-1.5 rounded-full ${color}`} style={{ width: `${u.rate}%` }} /></div><span className="text-xs text-muted-foreground">{u.rate}%</span></div>); })()}
+                          {(() => { const u = utilizationMap.get(item.id); if (!u) return null; const color = u.rate >= 70 ? "bg-emerald-500" : u.rate >= 40 ? "bg-amber-500" : "bg-muted-foreground/40"; const textColor = u.rate >= 70 ? "text-emerald-500" : u.rate >= 40 ? "text-amber-500" : "text-muted-foreground"; return (<div className="flex items-center gap-2.5"><div className="w-20 h-2 rounded-full bg-border/50 overflow-hidden"><motion.div initial={{ width: 0 }} animate={{ width: `${u.rate}%` }} transition={{ duration: 0.7, delay: index * 0.02, ease: "easeOut" }} className={`h-2 rounded-full ${color}`} /></div><span className={`text-xs font-medium tabular-nums ${textColor}`}>{u.rate}%</span></div>); })()}
                         </td>
                         <td className="px-5 py-4">
                           <div className="flex justify-end gap-2">
