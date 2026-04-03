@@ -185,23 +185,29 @@ const ReservationsPage: React.FC = () => {
         <section className="grid gap-6 xl:grid-cols-[1.45fr_0.95fr]">
           <div className="space-y-6">
             <div className="glass-card p-4 premium-shadow">
-              <div className="grid gap-4 lg:grid-cols-[1.8fr_1fr]">
-                <div className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar por cliente ou codigo..." value={search} onChange={(event) => setSearch(event.target.value)} className="pl-9" /></div>
-                <div className="grid grid-cols-2 gap-3">
-                  <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as ReservationStatus | "all")} className="h-10 rounded-xl border border-input bg-background px-3 text-sm">{statuses.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
-                  <select value={period} onChange={(event) => setPeriod(event.target.value)} className="h-10 rounded-xl border border-input bg-background px-3 text-sm"><option value="all">Todo periodo</option><option value="today">Retiradas de hoje</option><option value="week">Proximos 7 dias</option></select>
+              <div className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar por cliente ou codigo..." value={search} onChange={(event) => setSearch(event.target.value)} className="pl-9" /></div>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {statuses.map((item) => (
+                  <motion.button key={item.value} type="button" whileTap={{ scale: 0.95 }} onClick={() => setStatusFilter(item.value as ReservationStatus | "all")} className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all duration-200 ${statusFilter === item.value ? "border-primary/30 bg-primary text-primary-foreground shadow-sm shadow-primary/20" : "border-border/60 bg-surface/50 text-muted-foreground hover:border-primary/20 hover:text-foreground"}`}>{item.label}</motion.button>
+                ))}
+                <div className="ml-auto flex items-center gap-1 rounded-xl border border-border/50 bg-surface/40 p-1">
+                  {[{ value: "all", label: "Todos" }, { value: "today", label: "Hoje" }, { value: "week", label: "7 dias" }].map((item) => (
+                    <motion.button key={item.value} type="button" whileTap={{ scale: 0.95 }} onClick={() => setPeriod(item.value)} className={`relative rounded-lg px-3 py-1 text-xs font-medium transition-colors ${period === item.value ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+                      {period === item.value && <motion.div layoutId="period-pill-res" className="absolute inset-0 gradient-gold rounded-lg" transition={{ type: "spring", stiffness: 400, damping: 30 }} />}
+                      <span className="relative z-10">{item.label}</span>
+                    </motion.button>
+                  ))}
                 </div>
               </div>
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-              {statuses.map((item) => <button key={item.value} type="button" onClick={() => setStatusFilter(item.value as ReservationStatus | "all")} className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${statusFilter === item.value ? "border-primary/30 bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "border-border/60 bg-surface/50 text-muted-foreground hover:border-primary/20 hover:text-foreground"}`}>{item.label}</button>)}
               {selectMode && (
-                <div className="ml-auto flex items-center gap-2">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2">
                   <span className="text-xs text-muted-foreground">{selectedIds.size} selecionada(s)</span>
                   <button type="button" onClick={selectAll} className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/20 transition-colors">Todas ({filtered.length})</button>
                   {selectedIds.size > 0 && <button type="button" onClick={deselectAll} className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">Limpar</button>}
                 </div>
+              </div>
               )}
-            </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">

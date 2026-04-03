@@ -39,6 +39,10 @@ export const AppLayout: React.FC = () => {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, [location.pathname]);
   const { isBootstrapping } = useAppData();
   const location = useLocation();
 

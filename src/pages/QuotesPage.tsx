@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import confetti from "canvas-confetti";
 import { Copy, Download, Eye, FileText, Link2, Plus, Printer, Search, RefreshCcw, ThumbsDown, CheckCircle2, Pencil, WandSparkles } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -57,7 +58,16 @@ const QuotesPage: React.FC = () => {
 
   const handleConvert = (quote: Quote) => {
     const reservation = convertQuoteToReservation(quote.id);
-    if (reservation) toast.success(`Proposta convertida na reserva ${reservation.id}.`);
+    if (reservation) {
+      confetti({
+        particleCount: 90,
+        spread: 65,
+        origin: { y: 0.55 },
+        colors: ["#ca9d2d", "#f0c040", "#e8b820", "#fef3c7", "#ffffff"],
+        gravity: 0.9,
+      });
+      toast.success(`Proposta convertida na reserva ${reservation.id}.`);
+    }
   };
 
   const handleShare = (quote: Quote) => {

@@ -20,10 +20,19 @@ const statusConfig: Record<string, { label: string; className: string }> = {
   confirmed: { label: "Confirmado", className: "bg-success/15 text-success border-success/30" },
 };
 
+const PULSE_STATUSES = new Set(["in_progress", "maintenance", "active", "reserved", "sent"]);
+
 export const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const config = statusConfig[status] || { label: status, className: "bg-muted text-muted-foreground border-border" };
+  const hasPulse = PULSE_STATUSES.has(status);
   return (
-    <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium", config.className)}>
+    <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium", config.className)}>
+      {hasPulse && (
+        <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ backgroundColor: "currentColor" }} />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "currentColor" }} />
+        </span>
+      )}
       {config.label}
     </span>
   );

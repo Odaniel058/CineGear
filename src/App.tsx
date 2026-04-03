@@ -34,7 +34,18 @@ const App = () => (
         <AppDataProvider>
           <TooltipProvider>
             <Toaster />
-            <Sonner />
+            <Sonner
+              position="bottom-right"
+              toastOptions={{
+                classNames: {
+                  toast: "!bg-card/95 !border-border/60 !backdrop-blur-xl !shadow-[0_0_0_1px_hsl(var(--border)/0.5),0_12px_40px_-8px_hsl(0_0%_0%/0.25)] !rounded-2xl",
+                  title: "!font-semibold !text-foreground !text-sm",
+                  description: "!text-muted-foreground !text-xs",
+                  actionButton: "!bg-primary !text-primary-foreground",
+                  cancelButton: "!bg-muted !text-muted-foreground",
+                },
+              }}
+            />
             <HashRouter>
               <Routes>
                 <Route path="/" element={<LandingPage />} />

@@ -24,6 +24,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const navItems = [
@@ -143,7 +144,9 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.04, duration: 0.3, ease: "easeOut" }}
             >
-              <Link
+              <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+            <Link
                 to={item.path}
                 onClick={onCloseMobile}
                 className={`flex items-center gap-3 px-2.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative ${
@@ -151,7 +154,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                     ? "sidebar-item-active text-primary border border-primary/20"
                     : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border border-transparent"
                 }`}
-                title={collapsed && !isMobile ? item.label : undefined}
               >
                 {active && (
                   <motion.div
@@ -195,6 +197,13 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                   />
                 )}
               </Link>
+              </TooltipTrigger>
+              {collapsed && !isMobile && (
+                <TooltipContent side="right" className="glass-card border-border/60 text-xs font-medium px-3 py-1.5">
+                  {item.label}
+                </TooltipContent>
+              )}
+            </Tooltip>
             </motion.div>
           );
         })}

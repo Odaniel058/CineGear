@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { BarChart, Bar, CartesianGrid, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from "recharts";
+import { BarChart, Bar, CartesianGrid, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell, Area, AreaChart } from "recharts";
 import { AlertCircle, ArrowDownLeft, ArrowRight, ArrowUpRight, CalendarCheck, Clock, CreditCard, DollarSign, Plus, TrendingUp, Wrench } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 import { KPICard } from "@/components/KPICard";
@@ -84,11 +84,17 @@ const DashboardPage: React.FC = () => {
             <div className="flex items-center justify-between mb-5"><div><h3 className="font-display font-semibold text-sm">Faturamento mensal</h3><p className="text-xs text-muted-foreground mt-0.5">Receita por periodo</p></div><div className="text-right"><p className="font-display font-bold text-lg gradient-gold-text">{formatCurrency(analytics.kpis.monthlyRevenue)}</p><p className="text-xs text-success">↑ 12% este mes</p></div></div>
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={chartData} barSize={28}>
+                <defs>
+                  <linearGradient id="goldBarGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(43,90%,62%)" stopOpacity={1} />
+                    <stop offset="100%" stopColor="hsl(43,70%,38%)" stopOpacity={0.85} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
                 <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={11} axisLine={false} tickLine={false} />
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} axisLine={false} tickLine={false} tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`} />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: "hsl(var(--primary)/0.06)", radius: 6 }} />
-                <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} name="Receita" />
+                <Bar dataKey="revenue" fill="url(#goldBarGradient)" radius={[6, 6, 0, 0]} name="Receita" />
               </BarChart>
             </ResponsiveContainer>
           </motion.div>
@@ -108,14 +114,20 @@ const DashboardPage: React.FC = () => {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="glass-card p-6 premium-shadow">
           <div className="flex items-center gap-4 mb-5"><div><h3 className="font-display font-semibold text-sm">Receita prevista vs realizada</h3><p className="text-xs text-muted-foreground mt-0.5">Comparativo mensal do ano</p></div><div className="ml-auto flex items-center gap-4 text-xs text-muted-foreground"><span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-primary inline-block rounded" />Realizado</span><span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-muted-foreground inline-block rounded" />Previsto</span></div></div>
           <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={analytics.monthlyRevenue}>
+            <AreaChart data={analytics.monthlyRevenue}>
+              <defs>
+                <linearGradient id="areaGoldGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="hsl(43,85%,55%)" stopOpacity={0.22} />
+                  <stop offset="95%" stopColor="hsl(43,85%,55%)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
               <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={11} axisLine={false} tickLine={false} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} axisLine={false} tickLine={false} tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`} />
               <Tooltip content={<CustomTooltip />} />
-              <Line type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ fill: "hsl(var(--primary))", r: 3 }} name="Realizado" />
+              <Area type="monotone" dataKey="revenue" stroke="hsl(43,85%,55%)" strokeWidth={2.5} fill="url(#areaGoldGradient)" dot={{ fill: "hsl(43,85%,55%)", r: 3, strokeWidth: 0 }} name="Realizado" />
               <Line type="monotone" dataKey="projected" stroke="hsl(var(--muted-foreground))" strokeWidth={2} dot={false} strokeDasharray="6 4" name="Previsto" />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </motion.div>
 

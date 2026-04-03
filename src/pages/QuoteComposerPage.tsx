@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import confetti from "canvas-confetti";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Check, ChevronRight, Download, Eye, FileText, Loader2, Package, Percent, Save, Sparkles, WandSparkles } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
@@ -188,6 +189,7 @@ const QuoteComposerPage: React.FC = () => {
     const reservation = convertQuoteToReservation(record.id);
     setActionLoading(null);
     if (reservation) {
+      confetti({ particleCount: 90, spread: 65, origin: { y: 0.55 }, colors: ["#ca9d2d", "#f0c040", "#e8b820", "#fef3c7", "#ffffff"], gravity: 0.9 });
       clearLocalDraft();
       toast.success(`Proposta convertida na reserva ${reservation.id}.`);
       navigate("/reservations");
