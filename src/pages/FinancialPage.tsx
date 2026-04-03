@@ -93,7 +93,7 @@ const FinancialPage: React.FC = () => {
   };
 
   const financeMoments = [
-    { title: "Cobranças quentes", value: pendingReservations.length, helper: "pedem acompanhamento hoje", icon: AlertCircle },
+    { title: "A cobrar hoje", value: pendingReservations.length, helper: "reservas ativas sem pagamento", icon: AlertCircle },
     { title: "Ticket premium", value: formatCurrency(analytics.kpis.averageTicket), helper: "média por reserva ativa", icon: Wallet },
     { title: "Aprovadas", value: analytics.kpis.approvedReservations, helper: "geram caixa em breve", icon: CalendarCheck },
   ];

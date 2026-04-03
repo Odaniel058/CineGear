@@ -211,8 +211,9 @@ const ReservationsPage: React.FC = () => {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              {filtered.map((reservation, index) => (
-                <motion.button key={reservation.id} type="button" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.03 }} onClick={() => selectMode ? toggleSelect(reservation.id) : setSelectedId(reservation.id)} className={`group relative rounded-[24px] border p-5 text-left transition-all duration-300 ${selectMode && selectedIds.has(reservation.id) ? "border-primary/50 bg-primary/8 premium-shadow-lg ring-2 ring-primary/20" : selectedId === reservation.id && !selectMode ? "border-primary/30 bg-primary/6 premium-shadow-lg" : "border-border/60 bg-card premium-shadow hover:-translate-y-1 hover:border-primary/20 hover:premium-shadow-lg"}`}>
+              <AnimatePresence initial={false}>
+              {filtered.map((reservation) => (
+                <motion.button key={reservation.id} type="button" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }} transition={{ duration: 0.15 }} onClick={() => selectMode ? toggleSelect(reservation.id) : setSelectedId(reservation.id)} className={`group relative rounded-[24px] border p-5 text-left transition-all duration-300 ${selectMode && selectedIds.has(reservation.id) ? "border-primary/50 bg-primary/8 premium-shadow-lg ring-2 ring-primary/20" : selectedId === reservation.id && !selectMode ? "border-primary/30 bg-primary/6 premium-shadow-lg" : "border-border/60 bg-card premium-shadow hover:-translate-y-1 hover:border-primary/20 hover:premium-shadow-lg"}`}>
                   {selectMode && (
                     <div className={`absolute top-4 right-4 h-5 w-5 rounded-md border-2 flex items-center justify-center transition-colors ${selectedIds.has(reservation.id) ? "bg-primary border-primary" : "border-border bg-background"}`}>
                       {selectedIds.has(reservation.id) && <Check className="h-3 w-3 text-primary-foreground" />}
@@ -232,6 +233,7 @@ const ReservationsPage: React.FC = () => {
                   </div>
                 </motion.button>
               ))}
+              </AnimatePresence>
             </div>
 
             {filtered.length === 0 && <div className="glass-card p-14 premium-shadow text-center text-muted-foreground"><CalendarDays className="mx-auto mb-3 h-10 w-10 opacity-40" /><p className="text-sm font-medium">Nenhuma reserva encontrada</p><p className="mt-1 text-xs">Crie uma nova proposta no composer ou ajuste os filtros.</p></div>}

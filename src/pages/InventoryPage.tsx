@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Search,
   Plus,
@@ -471,13 +471,15 @@ const InventoryPage: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.map((item, index) => (
+                    <AnimatePresence initial={false}>
+                    {filtered.map((item) => (
                       <motion.tr
                         key={item.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.02 }}
-                        className={`cursor-pointer border-b border-border/40 transition-all duration-200 group/row relative ${
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className={`cursor-pointer border-b border-border/40 transition-colors duration-200 group/row relative ${
                           selectedId === item.id
                             ? "bg-primary/8 hover:bg-primary/10"
                             : "hover:bg-surface/80"
@@ -485,13 +487,11 @@ const InventoryPage: React.FC = () => {
                         onClick={() => handleSelectEquipment(item.id)}
                       >
                         <td className="px-5 py-4 relative">
-                          {selectedId === item.id && (
-                            <motion.div
-                              layoutId="table-row-accent"
-                              className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r-full bg-primary"
-                              transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                            />
-                          )}
+                          <div
+                            className={`absolute left-0 top-2 bottom-2 w-[3px] rounded-r-full bg-primary transition-opacity duration-200 ${
+                              selectedId === item.id ? "opacity-100" : "opacity-0"
+                            }`}
+                          />
                           <div className="flex items-center gap-3">
                             <motion.div
                               whileHover={{ scale: 1.08 }}
@@ -527,6 +527,7 @@ const InventoryPage: React.FC = () => {
                         </td>
                       </motion.tr>
                     ))}
+                    </AnimatePresence>
                   </tbody>
                 </table>
               </div>
